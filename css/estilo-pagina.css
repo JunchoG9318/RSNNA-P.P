@@ -1,0 +1,85 @@
+.container-registros {
+  background-color: rgb(165, 165, 165);
+  vector-effect: fixed-position;
+  padding: 5px;
+  border-style: groove;
+}
+
+img {
+  width: auto;
+  height: 300px;
+  left: auto;
+}
+/* navbar */
+.navbar-custom {
+  background-color: #198754 !important; /* Verde de Bootstrap más atractivo */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.navbar-brand,
+.nav-link {
+  color: white !important;
+  font-weight: 500;
+}
+.navbar-brand:hover,
+.nav-link:hover {
+  color: #e9ecef !important;
+}
+.nav-link.active {
+  font-weight: 600;
+  text-decoration: underline;
+}
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+/*fin navbar*/
+
+.icon-box {
+  border-radius: auto;
+  background-color: blue;
+  padding: auto;
+  text-align: center;
+  color: rgb(0, 0, 0);
+  width: 100px;
+  height: 100px;
+  margin: auto;
+  image-orientation: from-image;
+}
+
+.icon-box img {
+  width: 32px;
+  height: 32px;
+  margin: auto;
+  padding: auto;
+  image-orientation: from-image;
+}
+
+.footer-icon {
+  background: linear-gradient(to top, rgb(0, 255, 132), rgb(0, 255, 132));
+  width: 32px;
+  height: 32px;
+  margin: auto;
+  padding: auto;
+}
+
+button {
+  background-color: rgb(1, 48, 255);
+  color: rgb(0, 0, 0);
+  border-bottom: 5px;
+}
+
+body {
+  background:(circle, rgb(0, 50, 83), rgb(0, 95, 133));
+}
+.remove-btn {
+  float: right;
+  color: red;
+  cursor: pointer;
+}
+    .container-registros {
+      background-color: rgb(196, 196, 196);
+      vector-effect: fixed-position;
+      padding: 5px;
+      border-style: groove;}

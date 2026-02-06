@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Registro de Funcionario</title>
+    <link href="css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="estilos/estilos.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+  </head>
+  <!--encabezado principal-->
+  <header>
+    <nav class="navbar" style="background-color: #007d38" data-bs-theme="light">
+      <div class="container">
+        <a class="navbar-brand" href="Primer_prototipo.html">INICIO</a>
+        <a class="nav-link active" aria-current="page" href="Fundaciones.html"
+          >FUNDACIONES</a
+        >
+        <a class="nav-link" href="Redes de apoyo.html">REDES</a>
+        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <body
+    style="
+      background: radial-gradient(circle, rgb(55, 64, 145), rgb(135, 225, 252));
+    "
+  >
+    <div class="container mt-5">
+      <h2 class="mb-4 text-center">Formulario de Registro - Funcionario</h2>
+      <form>
+        <!-- Datos personales -->
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white">Datos Personales</div>
+          <div class="card-body row g-3">
+            <div class="col-md-6">
+              <label for="nombre" class="form-label">Nombre completo</label>
+              <input type="text" class="form-control" id="nombre" required />
+            </div>
+            <div class="col-md-6">
+              <label for="documento" class="form-label"
+                >Documento de Identidad</label
+              >
+              <input type="text" class="form-control" id="documento" required />
+            </div>
+            <div class="col-md-4">
+              <label for="celular" class="form-label">Número de Celular</label>
+              <input type="tel" class="form-control" id="celular" />
+            </div>
+            <div class="col-md-4">
+              <label for="ciudad" class="form-label">Ciudad</label>
+              <input type="text" class="form-control" id="ciudad" />
+            </div>
+            <div class="col-md-4">
+              <label for="pais" class="form-label">País</label>
+              <input type="text" class="form-control" id="pais" />
+            </div>
+            <div class="col-md-6">
+              <label for="correo" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" id="correo" />
+            </div>
+            <div class="col-md-6">
+              <label for="fechaNacimiento" class="form-label"
+                >Fecha de Nacimiento</label
+              >
+              <input type="date" class="form-control" id="fechaNacimiento" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Escolaridad -->
+        <div class="card mb-4">
+          <div
+            class="card-header bg-success text-white d-flex justify-content-between align-items-center"
+          >
+            Escolaridad
+            <button
+              type="button"
+              class="btn btn-light btn-sm"
+              onclick="addEscolaridad()"
+            >
+              Agregar otra
+            </button>
+          </div>
+          <div class="card-body" id="escolaridad-container">
+            <div class="row g-3 escolaridad-block">
+              <div class="col-md-6">
+                <label class="form-label">Nivel Educativo</label>
+                <select class="form-select">
+                  <option selected disabled>Seleccione</option>
+                  <option>Bachillerato</option>
+                  <option>Técnico</option>
+                  <option>Tecnólogo</option>
+                  <option>Universitario</option>
+                  <option>Postgrado</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Institución Educativa</label>
+                <input type="text" class="form-control" />
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">Título Obtenido</label>
+                <input type="text" class="form-control" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experiencia Laboral -->
+        <div class="card mb-4">
+          <div
+            class="card-header bg-warning d-flex justify-content-between align-items-center"
+          >
+            Último Lugar de Trabajo
+            <button
+              type="button"
+              class="btn btn-light btn-sm"
+              onclick="addTrabajo()"
+            >
+              Agregar otro
+            </button>
+          </div>
+          <div class="card-body" id="trabajo-container">
+            <div class="row g-3 trabajo-block">
+              <div class="col-md-6">
+                <label class="form-label">Nombre de la Empresa</label>
+                <input type="text" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Cargo Ocupado</label>
+                <input type="text" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Fecha de Inicio</label>
+                <input type="date" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Fecha de Finalización</label>
+                <input type="date" class="form-control" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">Registrar</button>
+          <a href="registrar Internos.html"
+            ><button type="button" class="btn btn-primary">siguiente</button></a
+          >
+        </div>
+      </form>
+    </div>
+    <br>
+    <!-- Footer -->
+    
+    <script>
+      function addEscolaridad() {
+        const container = document.getElementById("escolaridad-container");
+        const block = container.querySelector(".escolaridad-block");
+        const clone = block.cloneNode(true);
+        container.appendChild(document.createElement("hr"));
+        container.appendChild(clone);
+      }
+
+      function addTrabajo() {
+        const container = document.getElementById("trabajo-container");
+        const block = container.querySelector(".trabajo-block");
+        const clone = block.cloneNode(true);
+        container.appendChild(document.createElement("hr"));
+        container.appendChild(clone);
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+  <footer
+      class="text-center text-lg-start text-white"
+      style="background-color: #007d38"
+    >
+      <!-- Grid container -->
+      <div class="container p-4 pb-0">
+        <!-- Section: Links -->
+        <section class="">
+          <!--Grid row-->
+          <div class="row">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold">TECNOAPPS</h6>
+              <p>
+                Somos especialistas en el desarrollo de aplicaciones móviles y
+                soluciones tecnológicas innovadoras para impulsar tu negocio en
+                la era digital.
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <hr class="w-100 clearfix d-md-none" />
+
+            <!-- Grid column -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold">PRODUCTOS</h6>
+              <p>
+                <a class="text-black">Desarrollo de aplicaciones moviles</a>
+              </p>
+              <p>
+                <a class="text-black">Desarrollo Web</a>
+              </p>
+              <p>
+                <a class="text-black">Desarrollo de software comercial</a>
+              </p>
+              <p>
+                <a class="text-black">Desarrollo de inteligencia artificial</a>
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <hr class="w-100 clearfix d-md-none" />
+
+            <!-- Grid column -->
+            <hr class="w-100 clearfix d-md-none" />
+
+            <!-- Grid columna -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold">Contacto</h6>
+              <p>
+                <i class="fas fa-home mr-3"></i> Girardot-Cundinamarca,252431,CO
+              </p>
+              <p><i class="fas fa-envelope mr-3"></i> sprite3d1893@gmail.com</p>
+              <p><i class="fas fa-phone mr-3"></i> + 57 3143124294</p>
+              <p><i class="fas fa-print mr-3"></i> + 57 3115194662</p>
+            </div>
+            <!-- Grid columna -->
+
+            <!-- Grid columna redes sociales -->
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold">
+                REDES SOCIALES
+              </h6>
+
+              <!-- Facebook -->
+              <a
+                class="btn btn-primary btn-floating m-1"
+                style="background-color: #3b5998"
+                href="#!"
+                role="button"
+                ><i class="bi bi-facebook"></i
+              ></a>
+
+              <!-- Twitter -->
+              <a
+                class="btn btn-primary btn-floating m-1"
+                style="background-color: #55acee"
+                href="#!"
+                role="button"
+                ><i class="bi bi-twitter-x"></i
+              ></a>
+
+              <!-- Google -->
+              <a
+                class="btn btn-primary btn-floating m-1"
+                style="background-color: #dd4b39"
+                href="#!"
+                role="button"
+                ><i class="bi bi-google"></i
+              ></a>
+
+              <!-- Instagram -->
+              <a
+                class="btn btn-primary btn-floating m-1"
+                style="background-color: #ac2bac"
+                href="#!"
+                role="button"
+                ><i class="bi bi-instagram"></i
+              ></a>
+
+              <!-- Linkedin -->
+              <a
+                class="btn btn-primary btn-floating m-1"
+                style="background-color: #0082ca"
+                href="#!"
+                role="button"
+                ><i class="bi bi-linkedin"></i
+              ></a>
+              <!-- Github -->
+              <a
+                class="btn btn-primary btn-floating m-1"
+                style="background-color: #333333"
+                href="#!"
+                role="button"
+                ><i class="bi bi-github"></i
+              ></a>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+        © 2025 Copyright:
+        <a class="text-white" href="https://mdbootstrap.com/"
+          >MDBootstrap.com</a
+        >
+      </div>
+      <!-- Copyright -->
+    </footer>
+</html>
