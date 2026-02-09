@@ -1,12 +1,15 @@
 <?php
-class regisrtrarFundacion
+require_once '../models/modelo.php';
+
+class registrarFundacion
 {
     public function registrarFundacionController($datos)
     {
         $tabla = "fundacion";
 
-        $respuesta = Modelo::registrarFundacionModelo($tabla, $datos);
+        $respuesta = modelo::registrarFundacionModelo($tabla, $datos);
 
         return $respuesta;
     }
 }
+?>

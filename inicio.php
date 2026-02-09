@@ -67,7 +67,7 @@ include("header.php");
               Registra tu fundación y solicita afiliación.
             </p>
           </div>
-          <a href="#" class="btn btn-success">
+          <a href="RegistrarFundacion.php" class="btn btn-success">
             Inscribir
           </a>
         </div>
@@ -91,7 +91,7 @@ include("header.php");
               Información de entidades de protección infantil.
             </p>
           </div>
-          <a href="Redes de apoyo.php" class="btn btn-success">
+          <a href="Redes_de_apoyo.php" class="btn btn-success">
             Ver
           </a>
 
