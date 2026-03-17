@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "";
+$password = "123456789";
 $dbname = "rsnna";
 
 $conexion = new mysqli($servername, $username, $password, $dbname);
