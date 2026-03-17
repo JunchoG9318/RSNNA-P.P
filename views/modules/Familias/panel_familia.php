@@ -79,17 +79,45 @@ include("../../../header.php");
                 </div>
             </div>
         </div>
+
+        <!-- Consultas -->
+        <!-- Consultas -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
+                <div class="card-body text-center p-4">
+
+                    <div class="bg-primary bg-opacity-10 rounded-circle p-4 d-inline-block mb-3">
+                        <i class="bi bi-search text-primary fs-1"></i>
+                    </div>
+
+                    <h4 class="fw-bold mb-2">Consultas</h4>
+
+                    <p class="text-muted mb-4">
+                        Consultar información del hijo y la fundación
+                    </p>
+
+                    <a href="<?php echo BASE_URL; ?>views/modules/Familias/consultas.php"
+                        class="btn btn-primary rounded-pill px-4">
+
+                        <i class="bi bi-arrow-right-circle me-2"></i>Ir a Consultas
+
+                    </a>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <style>
-.hover-card {
-    transition: all 0.3s ease;
-}
-.hover-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 30px rgba(0, 99, 65, 0.2) !important;
-}
+    .hover-card {
+        transition: all 0.3s ease;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 30px rgba(0, 99, 65, 0.2) !important;
+    }
 </style>
 
 <?php include("../../../footer.php"); ?>
