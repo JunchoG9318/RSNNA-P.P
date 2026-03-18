@@ -42,7 +42,7 @@ include("../../../header.php");
 
                             <button class="btn btn-outline-secondary text-start py-3 px-3"
                                 type="button"
-                                onclick="location.href='<?php echo BASE_URL; ?>views/modules/Familias/informacion_intern_fami.php'">
+                                onclick="location.href='<?php echo BASE_URL; ?>../views/modules/Familias/informacion_intern_fami.php'">
                                 <i class="bi bi-people me-2"></i>
                                 INFORMACION DEL INTERNO
                             </button>

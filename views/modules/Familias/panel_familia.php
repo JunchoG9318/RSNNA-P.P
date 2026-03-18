@@ -31,9 +31,37 @@ include("../../../header.php");
         </div>
     </div>
 
+    <!-- BLOQUE DE BIENVENIDA IGUAL AL ICBF -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="alert alert-success mb-0">
+                <h4 class="alert-heading fw-bold">
+                    <i class="bi bi-shield-check me-2"></i>¡Bienvenido al sistema!
+                </h4>
+                <p class="mb-0">Has iniciado sesión como <strong>familia</strong>.</p>
+                <hr class="my-2">
+                <p class="mb-0 small">
+                    <i class="bi bi-person-circle me-1"></i> ID: <?php echo $_SESSION['usuario_id']; ?> |
+                    <i class="bi bi-envelope me-1"></i> <?php echo $_SESSION['usuario_correo']; ?>
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="bg-success bg-opacity-10 rounded-4 p-3 text-center h-100 d-flex align-items-center justify-content-center">
+                <div>
+                    <span class="badge bg-success text-white px-3 py-2 mb-2">Tipo de usuario</span>
+                    <h5 class="fw-bold text-success mb-0">
+                        <i class="bi bi-people me-2"></i>Familia
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row g-4">
         <!-- Mis Familiares -->
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-3">
             <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
                 <div class="card-body text-center p-4">
                     <div class="bg-success bg-opacity-10 rounded-circle p-4 d-inline-block mb-3">
@@ -49,7 +77,7 @@ include("../../../header.php");
         </div>
 
         <!-- Información Personal -->
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-3">
             <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
                 <div class="card-body text-center p-4">
                     <div class="bg-primary bg-opacity-10 rounded-circle p-4 d-inline-block mb-3">
@@ -65,7 +93,7 @@ include("../../../header.php");
         </div>
 
         <!-- Documentación -->
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-3">
             <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
                 <div class="card-body text-center p-4">
                     <div class="bg-warning bg-opacity-10 rounded-circle p-4 d-inline-block mb-3">
@@ -81,8 +109,7 @@ include("../../../header.php");
         </div>
 
         <!-- Consultas -->
-        <!-- Consultas -->
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-3">
             <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
                 <div class="card-body text-center p-4">
 
@@ -117,6 +144,27 @@ include("../../../header.php");
     .hover-card:hover {
         transform: translateY(-10px);
         box-shadow: 0 20px 30px rgba(0, 99, 65, 0.2) !important;
+    }
+
+    .bg-success {
+        background-color: #006341 !important;
+    }
+
+    .bg-success.bg-opacity-10 {
+        background-color: rgba(0, 99, 65, 0.1) !important;
+    }
+
+    .text-success {
+        color: #006341 !important;
+    }
+
+    .btn-success {
+        background-color: #006341;
+        border-color: #006341;
+    }
+
+    .btn-success:hover {
+        background-color: #004d33;
     }
 </style>
 
