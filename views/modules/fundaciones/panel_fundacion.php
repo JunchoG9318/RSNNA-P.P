@@ -22,13 +22,23 @@ $fundacion_id = null;
 
 // Si el usuario es de tipo fundación, buscar su fundación asociada
 if ($usuario_tipo == 'fundacion') {
-    // Intentar obtener la fundación del usuario por nombre (como fallback)
-    $query_fundacion = "SELECT * FROM fundaciones WHERE nombre LIKE '%$usuario_nombre%' LIMIT 1";
+    // Intentar obtener la fundación del usuario - INCLUIR ESTADO EXPLÍCITAMENTE
+    // Primero intentar por nombre
+    $query_fundacion = "SELECT id, nombre, nit, estado FROM fundaciones WHERE nombre LIKE '%$usuario_nombre%' LIMIT 1";
     $result_fundacion = mysqli_query($conexion, $query_fundacion);
 
     if ($result_fundacion && mysqli_num_rows($result_fundacion) > 0) {
         $fundacion = mysqli_fetch_assoc($result_fundacion);
         $fundacion_id = $fundacion['id'];
+    } else {
+        // Si no encuentra por nombre, intentar por correo
+        $query_fundacion = "SELECT id, nombre, nit, estado FROM fundaciones WHERE correo_director = '$usuario_correo' LIMIT 1";
+        $result_fundacion = mysqli_query($conexion, $query_fundacion);
+        
+        if ($result_fundacion && mysqli_num_rows($result_fundacion) > 0) {
+            $fundacion = mysqli_fetch_assoc($result_fundacion);
+            $fundacion_id = $fundacion['id'];
+        }
     }
 }
 
@@ -39,11 +49,14 @@ $tipo_usuario_texto = ($usuario_tipo == 'icbf') ? 'funcionario ICBF' : 'fundaci�
 $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
 ?>
 
+<!-- Bootstrap Icons - MOVIDO AL INICIO PARA ASEGURAR QUE CARGUE -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
 
-            <!-- Identificación de usuario y botón cerrar sesión (MEJORADA Y ADAPTADA) -->
+            <!-- Identificación de usuario y botón cerrar sesión (COMO EN LA IMAGEN) -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h2 class="fw-bold text-dark">
@@ -54,11 +67,20 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                         Bienvenido, <strong><?php echo htmlspecialchars($usuario_nombre); ?></strong>
                     </p>
                 </div>
-                <div class="text-end">
-                    <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 border">
-                        <i class="bi bi-calendar me-2"></i><?php echo date('d/m/Y'); ?>
-                    </span>
-                    <a href="<?php echo BASE_URL; ?>views/modules/login/logout.php" class="btn btn-outline-danger ms-3">
+                <div class="d-flex align-items-center gap-3">
+                    <!-- FECHA (como en la imagen) -->
+                    <div class="text-end">
+                        <div class="fw-bold"><?php echo date('d/m/Y'); ?></div>
+                    </div>
+
+                    <!-- TIPO DE USUARIO (como en la imagen) -->
+                    <div class="text-end">
+                        <div class="small text-muted">Tipo de usuario</div>
+                        <div class="fw-bold text-success"><?php echo strtoupper($usuario_tipo); ?></div>
+                    </div>
+
+                    <!-- BOTÓN CERRAR SESIÓN -->
+                    <a href="<?php echo BASE_URL; ?>views/modules/login/logout.php" class="btn btn-outline-danger">
                         <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
                     </a>
                 </div>
@@ -66,7 +88,7 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
 
             <!-- Mensaje de bienvenida mejorado con estadísticas (ADAPTADO) -->
             <div class="row mb-4">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="alert alert-success mb-0">
                         <h4 class="alert-heading fw-bold">
                             <i class="bi bi-shield-check me-2"></i>¡Bienvenido al sistema!
@@ -74,18 +96,151 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                         <p class="mb-0">Has iniciado sesión como <strong><?php echo $tipo_usuario_texto; ?></strong>.</p>
                         <hr class="my-2">
                         <p class="mb-0 small">
-                            <i class="bi bi-person-circle me-1"></i> ID: <?php echo $usuario_id; ?> |
                             <i class="bi bi-envelope me-1"></i> <?php echo $usuario_correo; ?>
                         </p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="bg-success bg-opacity-10 rounded-4 p-3 text-center h-100 d-flex align-items-center justify-content-center">
-                        <div>
-                            <span class="badge bg-success text-white px-3 py-2 mb-2">Tipo de usuario</span>
-                            <h5 class="fw-bold text-success mb-0">
-                                <i class="<?php echo $icono_tipo; ?> me-2"></i><?php echo strtoupper($usuario_tipo); ?>
+            </div>
+
+            <!-- ===== NUEVA TARJETA INFORMATIVA CON VENTANA EMERGENTE ===== -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card border-0 shadow-sm bg-info bg-opacity-10">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-info rounded-circle p-3 me-3">
+                                        <i class="bi bi-question-circle-fill text-white fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="fw-bold mb-1">¿Cómo utilizar este panel?</h5>
+                                        <p class="text-muted mb-0">Haz clic en el botón para ver una guía rápida de todas las funcionalidades disponibles.</p>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-info btn-lg rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalGuiaPanel">
+                                    <i class="bi bi-lightbulb me-2"></i>Ver Guía Rápida
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL - VENTANA EMERGENTE CON LA GUÍA DEL PANEL -->
+            <div class="modal fade" id="modalGuiaPanel" tabindex="-1" aria-labelledby="modalGuiaPanelLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title fw-bold" id="modalGuiaPanelLabel">
+                                <i class="bi bi-compass me-2"></i>
+                                Guía Rápida - Panel de <?php echo $titulo_panel; ?>
                             </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <!-- Introducción -->
+                            <div class="alert alert-info bg-opacity-10 mb-4">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                Este panel te permite gestionar toda la información relacionada con la fundación y los internos. A continuación, te explicamos cada sección:
+                            </div>
+
+                            <!-- Tarjetas de funcionalidades - CON ICONOS MEJORADOS -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="bg-info bg-opacity-10 rounded-circle p-2 me-2">
+                                                    <i class="bi bi-building-add text-info fs-4"></i>
+                                                </div>
+                                                <h6 class="fw-bold mb-0">Registrar información personal</h6>
+                                            </div>
+                                            <p class="text-muted small mb-0">Permite registrar los datos de la fundación, incluyendo información de contacto, NIT y datos del director.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
+                                                    <i class="bi bi-person-plus-fill text-success fs-4"></i>
+                                                </div>
+                                                <h6 class="fw-bold mb-0">Registrar Interno</h6>
+                                            </div>
+                                            <p class="text-muted small mb-0">Ingresa un nuevo interno al sistema con todos sus datos personales, familiares y de ingreso.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                                    <i class="bi bi-building text-primary fs-4"></i>
+                                                </div>
+                                                <h6 class="fw-bold mb-0">Información de la Fundación</h6>
+                                            </div>
+                                            <p class="text-muted small mb-0">Consulta los datos generales de la fundación, el representante legal y el listado de funcionarios.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="bg-secondary bg-opacity-10 rounded-circle p-2 me-2">
+                                                    <i class="bi bi-search-heart text-secondary fs-4"></i>
+                                                </div>
+                                                <h6 class="fw-bold mb-0">Consultar Interno</h6>
+                                            </div>
+                                            <p class="text-muted small mb-0">Busca información detallada de un interno específico por nombre, documento u otros criterios.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-2">
+                                                    <i class="bi bi-bar-chart-fill text-warning fs-4"></i>
+                                                </div>
+                                                <h6 class="fw-bold mb-0">Reporte Internos</h6>
+                                            </div>
+                                            <p class="text-muted small mb-0">Visualiza estadísticas y reportes detallados de internos agrupados por fundación.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="bg-danger bg-opacity-10 rounded-circle p-2 me-2">
+                                                    <i class="bi bi-box-arrow-right text-danger fs-4"></i>
+                                                </div>
+                                                <h6 class="fw-bold mb-0">Cerrar Sesión</h6>
+                                            </div>
+                                            <p class="text-muted small mb-0">Finaliza tu sesión de forma segura cuando termines de trabajar en el sistema.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Consejos adicionales -->
+                            <div class="bg-light p-3 rounded-3">
+                                <h6 class="fw-bold mb-2"><i class="bi bi-star-fill text-warning me-2"></i>Consejos útiles:</h6>
+                                <ul class="mb-0 small">
+                                    <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-2"></i>Todas las tarjetas tienen el mismo tamaño y son completamente responsivas.</li>
+                                    <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-2"></i>Pasa el cursor sobre cualquier tarjeta para ver un efecto de elevación.</li>
+                                    <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-2"></i>Los reportes muestran estadísticas en tiempo real de todos los internos.</li>
+                                    <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-2"></i>Puedes imprimir cualquier reporte usando el botón "Imprimir" disponible en las tablas.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x-lg me-2"></i>Cerrar
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -95,12 +250,15 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
             <!-- Primera fila de tarjetas - 3 por fila -->
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
 
-                <!-- Tarjeta 1: Registrar información personal -->
+                <!-- Tarjeta 1: Registrar información personal - CON NUEVOS ICONOS -->
                 <div class="col">
                     <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
                         <div class="card-body text-center p-4 d-flex flex-column">
-                            <div class="bg-info bg-opacity-10 rounded-circle p-4 d-inline-block mx-auto mb-3">
-                                <i class="bi bi-building-add text-info fs-1"></i>
+                            <div class="d-flex justify-content-center align-items-center mb-3">
+                                <div class="bg-info position-relative rounded-circle d-flex justify-content-center align-items-center" style="width: 120px; height: 120px; background-color: rgba(13, 202, 240, 0.15) !important;">
+                                    <i class="bi bi-file-earmark-person-fill text-info" style="font-size: 4rem;"></i>
+                                    <i class="bi bi-pencil-fill text-info position-absolute" style="font-size: 1.8rem; bottom: 15px; right: 15px;"></i>
+                                </div>
                             </div>
                             <h4 class="fw-bold mb-2">Registrar información personal</h4>
                             <p class="text-muted mb-4 flex-grow-1">Información personal</p>
@@ -112,12 +270,15 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                     </div>
                 </div>
 
-                <!-- Tarjeta 2: Registro de Interno -->
+                <!-- Tarjeta 2: Registro de Interno - CON NUEVOS ICONOS -->
                 <div class="col">
                     <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
                         <div class="card-body text-center p-4 d-flex flex-column">
-                            <div class="bg-success bg-opacity-10 rounded-circle p-4 d-inline-block mx-auto mb-3">
-                                <i class="bi bi-person-plus-fill text-success fs-1"></i>
+                            <div class="d-flex justify-content-center align-items-center mb-3">
+                                <div class="bg-success position-relative rounded-circle d-flex justify-content-center align-items-center" style="width: 120px; height: 120px; background-color: rgba(0, 99, 65, 0.15) !important;">
+                                    <i class="bi bi-person-fill-add text-success" style="font-size: 4rem;"></i>
+                                    <i class="bi bi-house-heart-fill text-success position-absolute" style="font-size: 1.8rem; top: 15px; right: 15px;"></i>
+                                </div>
                             </div>
                             <h4 class="fw-bold mb-2">Registrar Interno</h4>
                             <p class="text-muted mb-4 flex-grow-1">Ingresa un nuevo interno al sistema</p>
@@ -128,17 +289,19 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                     </div>
                 </div>
 
-                <!-- Tarjeta 3: Ver Fundaciones -->
+                <!-- Tarjeta 3: Información de la Fundación -->
                 <div class="col">
                     <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
                         <div class="card-body text-center p-4 d-flex flex-column">
-                            <div class="bg-primary bg-opacity-10 rounded-circle p-4 d-inline-block mx-auto mb-3">
-                                <i class="bi bi-building text-primary fs-1"></i>
+                            <div class="d-flex justify-content-center align-items-center mb-3">
+                                <div class="bg-primary rounded-circle d-flex justify-content-center align-items-center" style="width: 120px; height: 120px; background-color: rgba(13, 110, 253, 0.15) !important;">
+                                    <i class="bi bi-building text-primary" style="font-size: 4rem;"></i>
+                                </div>
                             </div>
-                            <h4 class="fw-bold mb-2">Informacion de la Fundacion</h4>
-                            <p class="text-muted mb-4 flex-grow-1">Caracteristicas Institucionales</p>
+                            <h4 class="fw-bold mb-2">Información de la Fundación</h4>
+                            <p class="text-muted mb-4 flex-grow-1">Características Institucionales</p>
                             <a href="<?php echo BASE_URL; ?>views/modules/fundaciones/informacionFundacion.php" class="btn btn-primary btn-lg rounded-pill w-100 mt-auto">
-                                <i class="bi bi-list-columns me-2"></i>Ver Informacion
+                                <i class="bi bi-list-columns me-2"></i>Ver Información
                             </a>
                         </div>
                     </div>
@@ -148,28 +311,33 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
             <!-- Segunda fila de tarjetas - 3 por fila -->
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
 
-                <!-- Tarjeta 4: Consultar Interno -->
+                <!-- Tarjeta 4: Consultar Interno - CON NUEVOS ICONOS -->
                 <div class="col">
                     <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
                         <div class="card-body text-center p-4 d-flex flex-column">
-                            <div class="bg-secondary bg-opacity-10 rounded-circle p-4 d-inline-block mx-auto mb-3">
-                                <i class="bi bi-search-heart text-secondary fs-1"></i>
+                            <div class="d-flex justify-content-center align-items-center mb-3">
+                                <div class="bg-secondary position-relative rounded-circle d-flex justify-content-center align-items-center" style="width: 120px; height: 120px; background-color: rgba(108, 117, 125, 0.15) !important;">
+                                    <i class="bi bi-person-standing-dress text-secondary" style="font-size: 4rem;"></i>
+                                    <i class="bi bi-search text-secondary position-absolute" style="font-size: 2rem; bottom: 10px; right: 10px;"></i>
+                                </div>
                             </div>
                             <h4 class="fw-bold mb-2">Consultar Interno</h4>
                             <p class="text-muted mb-4 flex-grow-1">Busca información de un interno específico por nombre o documento</p>
-                            <a href="<?php echo BASE_URL; ?>views/modules/Consultas/Consultar Interno.php" class="btn btn-secondary btn-lg rounded-pill w-100 mt-auto">
+                            <a href="<?php echo BASE_URL; ?>views/modules/fundaciones/consulta_por_fundacion.php" class="btn btn-secondary btn-lg rounded-pill w-100 mt-auto">
                                 <i class="bi bi-search me-2"></i>Buscar Interno
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Tarjeta 5: Reporte de Internos -->
+                <!-- Tarjeta 5: Reporte Internos -->
                 <div class="col">
                     <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
                         <div class="card-body text-center p-4 d-flex flex-column">
-                            <div class="bg-warning bg-opacity-10 rounded-circle p-4 d-inline-block mx-auto mb-3">
-                                <i class="bi bi-bar-chart-fill text-warning fs-1"></i>
+                            <div class="d-flex justify-content-center align-items-center mb-3">
+                                <div class="bg-warning rounded-circle d-flex justify-content-center align-items-center" style="width: 120px; height: 120px; background-color: rgba(255, 193, 7, 0.15) !important;">
+                                    <i class="bi bi-bar-chart-fill text-warning" style="font-size: 4rem;"></i>
+                                </div>
                             </div>
                             <h4 class="fw-bold mb-2">Reporte Internos</h4>
                             <p class="text-muted mb-4 flex-grow-1">Estadísticas por fundación</p>
@@ -180,12 +348,14 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                     </div>
                 </div>
 
-                <!-- Tarjeta 6: Espacio para futuras funcionalidades -->
+                <!-- Tarjeta 6: Próximamente -->
                 <div class="col">
                     <div class="card border-0 shadow-lg rounded-4 h-100 hover-card opacity-50">
                         <div class="card-body text-center p-4 d-flex flex-column">
-                            <div class="bg-light bg-opacity-10 rounded-circle p-4 d-inline-block mx-auto mb-3">
-                                <i class="bi bi-plus-circle text-muted fs-1"></i>
+                            <div class="d-flex justify-content-center align-items-center mb-3">
+                                <div class="bg-light rounded-circle d-flex justify-content-center align-items-center" style="width: 120px; height: 120px; background-color: rgba(248, 249, 250, 0.15) !important;">
+                                    <i class="bi bi-hourglass-split text-muted" style="font-size: 4rem;"></i>
+                                </div>
                             </div>
                             <h4 class="fw-bold mb-2 text-muted">Próximamente</h4>
                             <p class="text-muted mb-4 flex-grow-1">Nuevas funcionalidades estarán disponibles pronto</p>
@@ -206,19 +376,20 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
             <?php
             // CONSULTA MODIFICADA - Filtrar por fundación del usuario si es necesario
             if ($usuario_tipo == 'fundacion' && $fundacion_id) {
-                // Mostrar solo la fundación del usuario
+                // Mostrar solo la fundación del usuario - INCLUIR ESTADO
                 $query = "
                     SELECT 
                         f.id,
                         f.nombre as fundacion_nombre,
                         f.nit,
+                        f.estado,
                         COUNT(i.id) as total_internos,
                         SUM(CASE WHEN MONTH(i.fecha_ingreso) = MONTH(CURDATE()) AND YEAR(i.fecha_ingreso) = YEAR(CURDATE()) THEN 1 ELSE 0 END) as internos_mes,
                         MAX(i.fecha_ingreso) as ultimo_ingreso
                     FROM fundaciones f
                     LEFT JOIN ingresos_fundacion i ON f.nombre = i.fundacion_nombre
                     WHERE f.id = $fundacion_id
-                    GROUP BY f.id
+                    GROUP BY f.id, f.nombre, f.nit, f.estado
                     ORDER BY total_internos DESC
                 ";
             } else {
@@ -228,12 +399,13 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                         f.id,
                         f.nombre as fundacion_nombre,
                         f.nit,
+                        f.estado,
                         COUNT(i.id) as total_internos,
                         SUM(CASE WHEN MONTH(i.fecha_ingreso) = MONTH(CURDATE()) AND YEAR(i.fecha_ingreso) = YEAR(CURDATE()) THEN 1 ELSE 0 END) as internos_mes,
                         MAX(i.fecha_ingreso) as ultimo_ingreso
                     FROM fundaciones f
                     LEFT JOIN ingresos_fundacion i ON f.nombre = i.fundacion_nombre
-                    GROUP BY f.id
+                    GROUP BY f.id, f.nombre, f.nit, f.estado
                     ORDER BY total_internos DESC
                 ";
             }
@@ -255,22 +427,52 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                 $total_internos_general = $result_total ? mysqli_fetch_assoc($result_total)['total'] : 0;
             ?>
 
-                <!-- Resumen - TARJETA CORREGIDA con verificaciones -->
+                <!-- Resumen - TARJETA CORREGIDA con verificaciones de estado -->
                 <div class="row g-4 mb-4">
                     <div class="col-md-4">
-                        <div class="card bg-success text-white shadow-lg border-0 rounded-4">
+                        <?php
+                        // Determinar el color de fondo según el estado
+                        $estado_fundacion = isset($fundacion) && isset($fundacion['estado']) ? $fundacion['estado'] : null;
+                        $color_fondo = '#006341'; // Verde por defecto (activa)
+                        
+                        if ($estado_fundacion === null) {
+                            $color_fondo = '#6c757d'; // Gris si no disponible
+                        } elseif ($estado_fundacion == 0) {
+                            $color_fondo = '#dc3545'; // Rojo si inactiva
+                        }
+                        ?>
+                        <div class="card text-white shadow-lg border-0 rounded-4" style="background-color: <?php echo $color_fondo; ?> !important;">
                             <div class="card-body p-4">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h6 class="text-white-50 mb-2">Fundación Activa</h6>
-                                        <h4 class="fw-bold mb-0">
+                                        <h6 class="text-white-50 mb-2">Fundación</h6>
+                                        <h4 class="fw-bold mb-0 text-white">
                                             <?php echo isset($fundacion) && isset($fundacion['nombre']) ? htmlspecialchars($fundacion['nombre']) : 'No disponible'; ?>
                                         </h4>
+                                        <div class="mt-2">
+                                            <?php if ($estado_fundacion !== null): ?>
+                                                <?php if ($estado_fundacion == 1): ?>
+                                                    <span class="badge bg-white text-success px-3 py-2">
+                                                        <i class="bi bi-check-circle-fill me-1"></i>ACTIVA
+                                                    </span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-white text-danger px-3 py-2">
+                                                        <i class="bi bi-x-circle-fill me-1"></i>INACTIVA
+                                                    </span>
+                                                <?php endif; ?>
+                                            <?php else: ?>
+                                                <span class="badge bg-white text-secondary px-3 py-2">
+                                                    <i class="bi bi-question-circle-fill me-1"></i>NO DISPONIBLE
+                                                </span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <i class="bi bi-building fs-1 text-white-50 d-block mb-2"></i>
                                         <?php if (isset($fundacion) && isset($fundacion['nit'])): ?>
                                             <small class="text-white-50">NIT: <?php echo htmlspecialchars($fundacion['nit']); ?></small>
                                         <?php endif; ?>
                                     </div>
-                                    <i class="bi bi-building fs-1 text-white-50"></i>
                                 </div>
                             </div>
                         </div>
@@ -281,7 +483,7 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <h6 class="text-white-50 mb-2">Total Internos</h6>
-                                        <h3 class="fw-bold mb-0"><?php echo $total_internos_general; ?></h3>
+                                        <h3 class="fw-bold mb-0 text-white"><?php echo $total_internos_general; ?></h3>
                                     </div>
                                     <i class="bi bi-people-fill fs-1 text-white-50"></i>
                                 </div>
@@ -294,7 +496,7 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <h6 class="text-white-50 mb-2">Promedio x Fundación</h6>
-                                        <h3 class="fw-bold mb-0">
+                                        <h3 class="fw-bold mb-0 text-white">
                                             <?php
                                             echo $total_fundaciones > 0
                                                 ? round($total_internos_general / $total_fundaciones, 1)
@@ -309,7 +511,7 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                     </div>
                 </div>
 
-                <!-- TABLA DE RESULTADOS MODIFICADA - Solo muestra la fundación del usuario logueado -->
+                <!-- TABLA DE RESULTADOS MODIFICADA - Incluye estado -->
                 <div class="card border-0 shadow-lg rounded-4">
                     <div class="card-header bg-success text-white py-3 border-0">
                         <h5 class="mb-0 fw-bold">
@@ -325,6 +527,7 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                                         <th class="px-4 py-3">#</th>
                                         <th class="py-3">Fundación</th>
                                         <th class="py-3">NIT</th>
+                                        <th class="py-3 text-center">Estado</th>
                                         <th class="py-3 text-center">Total Internos</th>
                                         <th class="py-3 text-center">Internos (Mes)</th>
                                         <th class="py-3 text-center">% del Total</th>
@@ -340,6 +543,18 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                                             $porcentaje = $total_internos_general > 0
                                                 ? round(($row['total_internos'] / $total_internos_general) * 100, 1)
                                                 : 0;
+                                            
+                                            // Determinar badge de estado
+                                            $estado_badge = '';
+                                            if (isset($row['estado'])) {
+                                                if ($row['estado'] == 1) {
+                                                    $estado_badge = '<span class="badge bg-success">Activa</span>';
+                                                } else {
+                                                    $estado_badge = '<span class="badge bg-danger">Inactiva</span>';
+                                                }
+                                            } else {
+                                                $estado_badge = '<span class="badge bg-secondary">No definido</span>';
+                                            }
                                     ?>
                                             <tr>
                                                 <td class="px-4"><?php echo $contador++; ?></td>
@@ -352,6 +567,7 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                                                     </div>
                                                 </td>
                                                 <td><?php echo htmlspecialchars($row['nit']); ?></td>
+                                                <td class="text-center"><?php echo $estado_badge; ?></td>
                                                 <td class="text-center">
                                                     <span class="fw-bold fs-5"><?php echo $row['total_internos']; ?></span>
                                                 </td>
@@ -378,11 +594,11 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
                                             </tr>
                                         <?php
                                         endwhile;
-                                        
+
                                     else:
                                         ?>
                                         <tr>
-                                            <td colspan="7" class="text-center py-4">
+                                            <td colspan="8" class="text-center py-4">
                                                 <i class="bi bi-building fs-1 text-muted d-block mb-3"></i>
                                                 <?php if (isset($usuario_tipo) && $usuario_tipo == 'fundacion'): ?>
                                                     <h5>No se encontró tu fundación</h5>
@@ -473,9 +689,40 @@ $icono_tipo = ($usuario_tipo == 'icbf') ? 'bi-building' : 'bi-tree';
     .mt-auto {
         margin-top: auto;
     }
+
+    /* Asegurar que el texto de los badges sea blanco */
+    .badge.bg-success.text-white,
+    .badge.bg-info.text-white,
+    .badge.bg-warning.text-white,
+    .badge.bg-primary.text-white,
+    .badge.bg-secondary.text-white {
+        color: #ffffff !important;
+    }
+
+    /* Asegurar que el texto de los contadores en tarjetas sea blanco */
+    .card.bg-success .card-body .fw-bold,
+    .card.bg-primary .card-body .fw-bold,
+    .card.bg-warning .card-body .fw-bold,
+    .card.bg-success .card-body h3,
+    .card.bg-primary .card-body h3,
+    .card.bg-warning .card-body h3,
+    .card.bg-success .card-body h4,
+    .card.bg-primary .card-body h4,
+    .card.bg-warning .card-body h4 {
+        color: #ffffff !important;
+    }
+
+    /* Estilo para el modal */
+    .modal-header.bg-info {
+        background-color: #0dcaf0 !important;
+    }
+
+    .btn-close-white {
+        filter: brightness(0) invert(1);
+    }
 </style>
 
-<!-- Bootstrap Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<!-- Bootstrap JS (necesario para el modal) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php include("../../../footer.php"); ?>

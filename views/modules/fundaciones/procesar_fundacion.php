@@ -16,6 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'fecha_constitucion',
         'tipo',
         'nombre_director',
+        'tipo_documento_director',   // Nuevo campo
+        'documento_director',         // Nuevo campo
         'correo_director',
         'telefono_director',
         'direccion',
@@ -37,6 +39,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fecha_constitucion = mysqli_real_escape_string($conexion, $_POST['fecha_constitucion']);
     $tipo = mysqli_real_escape_string($conexion, $_POST['tipo']);
     $nombre_director = mysqli_real_escape_string($conexion, trim($_POST['nombre_director']));
+    $tipo_documento_director = mysqli_real_escape_string($conexion, trim($_POST['tipo_documento_director']));
+    $documento_director = mysqli_real_escape_string($conexion, trim($_POST['documento_director']));
     $correo_director = mysqli_real_escape_string($conexion, trim($_POST['correo_director']));
     $telefono_director = mysqli_real_escape_string($conexion, trim($_POST['telefono_director']));
 
@@ -74,13 +78,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Insertar los datos en la tabla fundaciones con los nuevos campos
+    // Insertar los datos en la tabla fundaciones incluyendo los nuevos campos
     $query = "INSERT INTO fundaciones (
         nombre, 
         nit, 
         fecha_constitucion, 
         tipo, 
         nombre_director, 
+        tipo_documento_director,
+        documento_director,
         correo_director, 
         telefono_director,
         direccion,
@@ -93,6 +99,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         '$fecha_constitucion', 
         '$tipo', 
         '$nombre_director', 
+        '$tipo_documento_director',
+        '$documento_director',
         '$correo_director', 
         '$telefono_director',
         '$direccion',

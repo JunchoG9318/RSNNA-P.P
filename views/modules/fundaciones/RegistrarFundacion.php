@@ -137,6 +137,32 @@ include("../../../header.php");
                             </div>
                         </div>
 
+                        <!-- NUEVO CAMPO: Nacionalidad -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-flag text-success me-1"></i>Nacionalidad <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-success bg-opacity-10 border-0">
+                                    <i class="bi bi-flag text-success"></i>
+                                </span>
+                                <select name="nacionalidad" class="form-select" required>
+                                    <option value="" disabled selected>Seleccione nacionalidad</option>
+                                    <option value="Colombiana">Colombiana</option>
+                                    <option value="Venezolana">Venezolana</option>
+                                    <option value="Peruana">Peruana</option>
+                                    <option value="Ecuatoriana">Ecuatoriana</option>
+                                    <option value="Argentina">Argentina</option>
+                                    <option value="Chilena">Chilena</option>
+                                    <option value="Brasileña">Brasileña</option>
+                                    <option value="Mexicana">Mexicana</option>
+                                    <option value="Española">Española</option>
+                                    <option value="Estadounidense">Estadounidense</option>
+                                    <option value="Otra">Otra</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <!-- Título sección director -->
                         <h5 class="text-success border-start border-3 border-success ps-3 py-1 mb-4 mt-5">
                             <i class="bi bi-person-badge me-2"></i>Datos del Director
@@ -152,6 +178,39 @@ include("../../../header.php");
                                     <i class="bi bi-person-circle text-success"></i>
                                 </span>
                                 <input type="text" name="nombre_director" class="form-control" placeholder="Nombre completo del director" required>
+                            </div>
+                        </div>
+
+                        <!-- Tipo y Número de Documento del Director (nuevos) -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    <i class="bi bi-card-text text-success me-1"></i>Tipo de Documento <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-success bg-opacity-10 border-0">
+                                        <i class="bi bi-card-text text-success"></i>
+                                    </span>
+                                    <select name="tipo_documento_director" class="form-select" required>
+                                        <option value="" disabled selected>Seleccione tipo</option>
+                                        <option value="CC">Cédula de Ciudadanía</option>
+                                        <option value="CE">Cédula de Extranjería</option>
+                                        <option value="Pasaporte">Pasaporte</option>
+                                        <option value="NIT">NIT</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    <i class="bi bi-upc-scan text-success me-1"></i>Número de Documento <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-success bg-opacity-10 border-0">
+                                        <i class="bi bi-upc-scan text-success"></i>
+                                    </span>
+                                    <input type="text" name="documento_director" class="form-control" placeholder="Ej: 123456789" required>
+                                </div>
                             </div>
                         </div>
 
@@ -347,6 +406,7 @@ include("../../../header.php");
 
         // Si es Colombia, llenar departamentos
         if (paisSeleccionado === 'Colombia') {
+            selectDepartamento.disabled = false;
             for (let departamento in colombiaData) {
                 const option = document.createElement('option');
                 option.value = departamento;
@@ -357,6 +417,10 @@ include("../../../header.php");
             // Si no es Colombia, deshabilitar departamento
             selectDepartamento.disabled = true;
             selectDepartamento.innerHTML = '<option value="">Seleccione un departamento</option>';
+            // También limpiar ciudades
+            const selectCiudad = document.getElementById('ciudad');
+            selectCiudad.innerHTML = '<option value="">Seleccione una ciudad</option>';
+            selectCiudad.disabled = true;
         }
     }
 
@@ -371,8 +435,9 @@ include("../../../header.php");
         // Obtener el departamento seleccionado
         const departamentoSeleccionado = selectDepartamento.value;
 
-        // Si hay departamento seleccionado, llenar ciudades
-        if (departamentoSeleccionado && colombiaData[departamentoSeleccionado]) {
+        // Si hay departamento seleccionado y no está deshabilitado, llenar ciudades
+        if (departamentoSeleccionado && !selectDepartamento.disabled && colombiaData[departamentoSeleccionado]) {
+            selectCiudad.disabled = false;
             const ciudades = colombiaData[departamentoSeleccionado];
             ciudades.forEach(ciudad => {
                 const option = document.createElement('option');
@@ -380,6 +445,8 @@ include("../../../header.php");
                 option.textContent = ciudad;
                 selectCiudad.appendChild(option);
             });
+        } else {
+            selectCiudad.disabled = true;
         }
     }
 
@@ -394,6 +461,7 @@ include("../../../header.php");
             llenarDepartamentos();
             // Limpiar ciudades cuando cambia el país
             selectCiudad.innerHTML = '<option value="">Seleccione una ciudad</option>';
+            selectCiudad.disabled = true;
         });
 
         // Cuando cambia el departamento
@@ -405,3 +473,7 @@ include("../../../header.php");
         llenarDepartamentos();
     });
 </script>
+
+<?php
+include("../../../footer.php");
+?>

@@ -20,26 +20,28 @@ $usuario_correo = $_SESSION['usuario_correo'];
 $fundacion_id = 0;
 $fundacion_nombre = '';
 
-// Si el usuario es de tipo fundación, buscar su fundación asociada
+// ===== CORRECCIÓN: Obtener fundación del usuario =====
 if ($usuario_tipo == 'fundacion') {
-    // Primero intentar obtener por id_fundacion si existe en la tabla usuarios
-    $query_fundacion = "SELECT f.id, f.nombre FROM fundaciones f 
-                        INNER JOIN usuarios u ON f.id = u.id_fundacion 
-                        WHERE u.id = $usuario_id";
-    $result_fundacion = mysqli_query($conexion, $query_fundacion);
-    
-    if ($result_fundacion && mysqli_num_rows($result_fundacion) > 0) {
-        $row_fundacion = mysqli_fetch_assoc($result_fundacion);
-        $fundacion_id = $row_fundacion['id'];
-        $fundacion_nombre = $row_fundacion['nombre'];
+    // Buscar si el usuario tiene id_fundacion en la sesión
+    if (isset($_SESSION['id_fundacion']) && $_SESSION['id_fundacion'] > 0) {
+        $fundacion_id = $_SESSION['id_fundacion'];
+        // Obtener nombre de la fundación
+        $query_fundacion = "SELECT nombre FROM fundaciones WHERE id = $fundacion_id";
+        $result_fundacion = mysqli_query($conexion, $query_fundacion);
+        if ($result_fundacion && mysqli_num_rows($result_fundacion) > 0) {
+            $row_fundacion = mysqli_fetch_assoc($result_fundacion);
+            $fundacion_nombre = $row_fundacion['nombre'];
+        }
     } else {
-        // Fallback: buscar por nombre del usuario
+        // Si no hay id_fundacion en sesión, buscar por nombre del usuario
         $query_fundacion = "SELECT id, nombre FROM fundaciones WHERE nombre LIKE '%$usuario_nombre%' LIMIT 1";
         $result_fundacion = mysqli_query($conexion, $query_fundacion);
         if ($result_fundacion && mysqli_num_rows($result_fundacion) > 0) {
             $row_fundacion = mysqli_fetch_assoc($result_fundacion);
             $fundacion_id = $row_fundacion['id'];
             $fundacion_nombre = $row_fundacion['nombre'];
+            // Guardar en sesión para futuras consultas
+            $_SESSION['id_fundacion'] = $fundacion_id;
         }
     }
 } 
@@ -101,16 +103,25 @@ if ($usuario_tipo == 'fundacion') {
             </div>
 
             <?php
-            // Verificar que hay un ID de fundación válido
-            if ($fundacion_id <= 0) {
-                echo '<div class="alert alert-danger">No se ha podido identificar la fundación asociada a tu usuario.</div>';
+            // ===== CORRECCIÓN: Verificar que hay una fundación válida =====
+            if ($fundacion_id <= 0 || empty($fundacion_nombre)) {
+                echo '<div class="alert alert-warning">';
+                echo '<i class="bi bi-exclamation-triangle-fill me-2"></i>';
+                echo '<strong>No se ha podido identificar la fundación asociada a tu usuario.</strong>';
+                echo '<p class="mt-3 mb-0">Esto puede deberse a que tu usuario no está vinculado a ninguna fundación.</p>';
+                
                 if ($usuario_tipo == 'fundacion') {
-                    echo '<div class="text-center mt-3">
-                            <a href="' . BASE_URL . 'views/modules/fundaciones/registro_fundacion.php" class="btn btn-success">
-                                <i class="bi bi-building-add me-2"></i>Registrar Fundación
-                            </a>
-                          </div>';
+                    echo '<div class="mt-3">';
+                    echo '<a href="' . BASE_URL . 'views/modules/fundaciones/registro_fundacion.php" class="btn btn-success me-2">';
+                    echo '<i class="bi bi-building-add me-2"></i>Registrar Fundación';
+                    echo '</a>';
+                    echo '<a href="' . BASE_URL . 'views/modules/fundaciones/panel_fundacion.php" class="btn btn-outline-secondary">';
+                    echo '<i class="bi bi-arrow-left me-2"></i>Volver al Panel';
+                    echo '</a>';
+                    echo '</div>';
                 }
+                
+                echo '</div>';
             } else {
                 
                 // Consulta para obtener todos los internos de la fundación
@@ -221,12 +232,11 @@ if ($usuario_tipo == 'fundacion') {
                                     <th class="py-3">Hora</th>
                                     <th class="py-3">Motivo</th>
                                     <th class="py-3">Acudiente</th>
-                                    <th class="py-3 text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php 
-                                if (mysqli_num_rows($result) > 0):
+                                if ($total_internos > 0):
                                     $contador = 1;
                                     while ($row = mysqli_fetch_assoc($result)): 
                                 ?>
@@ -264,14 +274,6 @@ if ($usuario_tipo == 'fundacion') {
                                         ?>
                                     </td>
                                     <td><?php echo htmlspecialchars($row['acudiente_nombres'] ?: 'No registrado'); ?></td>
-                                    <td class="text-center">
-                                        <a href="<?php echo BASE_URL; ?>views/modules/fundaciones/detalle_interno.php?id=<?php echo $row['id']; ?>" 
-                                           class="btn btn-sm btn-success rounded-pill px-3"
-                                           data-bs-toggle="tooltip" 
-                                           title="Ver información completa">
-                                            <i class="bi bi-eye me-1"></i>Ver
-                                        </a>
-                                    </td>
                                 </tr>
                                 <?php 
                                     endwhile;
@@ -342,13 +344,5 @@ if ($usuario_tipo == 'fundacion') {
 
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-<!-- Tooltips -->
-<script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-</script>
 
 <?php include("../../../footer.php"); ?>

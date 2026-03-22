@@ -56,7 +56,6 @@ $fundaciones_con_funcionarios = mysqli_fetch_assoc($result_fundaciones_con_funci
                         <p class="mb-0">Has iniciado sesión como <strong>funcionario ICBF</strong>.</p>
                         <hr class="my-2">
                         <p class="mb-0 small">
-                            <i class="bi bi-person-circle me-1"></i> ID: <?php echo $_SESSION['usuario_id']; ?> |
                             <i class="bi bi-envelope me-1"></i> <?php echo $_SESSION['usuario_correo']; ?>
                         </p>
                     </div>
@@ -73,18 +72,18 @@ $fundaciones_con_funcionarios = mysqli_fetch_assoc($result_fundaciones_con_funci
                 </div>
             </div>
 
-            <!-- Tarjetas de opciones principales (MEJORADAS) - AHORA CON 4 TARJETAS -->
-            <div class="row g-4">
+            <!-- Tarjetas de opciones principales - TODAS CON EL MISMO TAMAÑO -->
+            <div class="row g-4 mb-5">
                 <!-- Tarjeta 1: Fundaciones -->
                 <div class="col-md-6 col-lg-3">
-                    <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
-                        <div class="card-body text-center p-4">
-                            <div class="bg-success bg-opacity-10 rounded-circle p-4 d-inline-block mb-3">
+                    <div class="card border-0 shadow-lg rounded-4 h-100 hover-card d-flex flex-column">
+                        <div class="card-body text-center p-4 d-flex flex-column flex-grow-1">
+                            <div class="bg-success bg-opacity-10 rounded-circle p-4 d-inline-block mx-auto mb-3">
                                 <i class="bi bi-building text-success fs-1"></i>
                             </div>
-                            <h4 class="fw-bold mb-2">Fundaciones</h4>
-                            <p class="text-muted mb-4">Administra y revisa todas las fundaciones registradas en el sistema</p>
-                            <div class="d-grid">
+                            <h4 class="fw-bold mb-2">Fundaciones en el sistema</h4>
+                            <p class="text-muted mb-4 flex-grow-1">Administra y revisa todas las fundaciones registradas en el sistema</p>
+                            <div class="d-grid mt-auto">
                                 <a href="<?php echo BASE_URL; ?>views/modules/ICBF/admin_fundaciones.php" class="btn btn-success btn-lg rounded-pill">
                                     <i class="bi bi-arrow-right-circle me-2"></i>Ver Fundaciones
                                 </a>
@@ -106,14 +105,14 @@ $fundaciones_con_funcionarios = mysqli_fetch_assoc($result_fundaciones_con_funci
 
                 <!-- Tarjeta 2: Internos -->
                 <div class="col-md-6 col-lg-3">
-                    <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
-                        <div class="card-body text-center p-4">
-                            <div class="bg-primary bg-opacity-10 rounded-circle p-4 d-inline-block mb-3">
+                    <div class="card border-0 shadow-lg rounded-4 h-100 hover-card d-flex flex-column">
+                        <div class="card-body text-center p-4 d-flex flex-column flex-grow-1">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-4 d-inline-block mx-auto mb-3">
                                 <i class="bi bi-people-fill text-primary fs-1"></i>
                             </div>
                             <h4 class="fw-bold mb-2">Internos En Fundaciones</h4>
-                            <p class="text-muted mb-4">listado de internos registrados en las fundaciones</p>
-                            <div class="d-grid">
+                            <p class="text-muted mb-4 flex-grow-1">Listado de internos registrados en las fundaciones</p>
+                            <div class="d-grid mt-auto">
                                 <a href="<?php echo BASE_URL; ?>views/modules/ICBF/listado_internos.php" class="btn btn-primary btn-lg rounded-pill">
                                     <i class="bi bi-arrow-right-circle me-2"></i>Ver Internos
                                 </a>
@@ -133,16 +132,16 @@ $fundaciones_con_funcionarios = mysqli_fetch_assoc($result_fundaciones_con_funci
                     </div>
                 </div>
 
-                <!-- Tarjeta 3: Funcionarios por Fundación (NUEVA) -->
+                <!-- Tarjeta 3: Información de Fundaciones - ICONO CORREGIDO -->
                 <div class="col-md-6 col-lg-3">
-                    <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
-                        <div class="card-body text-center p-4">
-                            <div class="bg-info bg-opacity-10 rounded-circle p-4 d-inline-block mb-3">
-                                <i class="bi bi-people text-info fs-1"></i>
+                    <div class="card border-0 shadow-lg rounded-4 h-100 hover-card d-flex flex-column">
+                        <div class="card-body text-center p-4 d-flex flex-column flex-grow-1">
+                            <div class="bg-info bg-opacity-10 rounded-circle p-4 d-inline-block mx-auto mb-3">
+                                <i class="bi bi-building-add text-info fs-4"></i>
                             </div>
-                            <h4 class="fw-bold mb-2">Funcionarios por Fundación</h4>
-                            <p class="text-muted mb-4">Visualiza los funcionarios registrados en cada fundación</p>
-                            <div class="d-grid">
+                            <h4 class="fw-bold mb-2">Información de Fundaciones</h4>
+                            <p class="text-muted mb-4 flex-grow-1">Visualiza los funcionarios registrados en cada fundación</p>
+                            <div class="d-grid mt-auto">
                                 <a href="<?php echo BASE_URL; ?>views/modules/ICBF/funcionarios_por_fundacion.php" class="btn btn-info btn-lg rounded-pill">
                                     <i class="bi bi-arrow-right-circle me-2"></i>Ver Funcionarios
                                 </a>
@@ -157,16 +156,43 @@ $fundaciones_con_funcionarios = mysqli_fetch_assoc($result_fundaciones_con_funci
                     </div>
                 </div>
 
-                <!-- Tarjeta 4: Reportes -->
+                <!-- Tarjeta 4: Consultar Interno -->
                 <div class="col-md-6 col-lg-3">
-                    <div class="card border-0 shadow-lg rounded-4 h-100 hover-card">
-                        <div class="card-body text-center p-4">
-                            <div class="bg-warning bg-opacity-10 rounded-circle p-4 d-inline-block mb-3">
+                    <div class="card border-0 shadow-lg rounded-4 h-100 hover-card d-flex flex-column">
+                        <div class="card-body text-center p-4 d-flex flex-column flex-grow-1">
+                            <div class="bg-secondary bg-opacity-10 rounded-circle p-4 d-inline-block mx-auto mb-3">
+                                <i class="bi bi-search-heart text-secondary fs-1"></i>
+                            </div>
+                            <h4 class="fw-bold mb-2">Consultar Interno</h4>
+                            <p class="text-muted mb-4 flex-grow-1">Busca información de un interno específico por nombre o documento</p>
+                            <div class="d-grid mt-auto">
+                                <a href="<?php echo BASE_URL; ?>views/modules/ICBF/Consultar_Interno.php" class="btn btn-secondary btn-lg rounded-pill">
+                                    <i class="bi bi-search me-2"></i>Buscar Interno
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pb-4 text-center">
+                            <small class="text-muted">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Búsqueda avanzada
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Segunda fila de tarjetas (si es necesario) -->
+            <div class="row g-4">
+                <!-- Tarjeta 5: Reportes -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card border-0 shadow-lg rounded-4 h-100 hover-card d-flex flex-column">
+                        <div class="card-body text-center p-4 d-flex flex-column flex-grow-1">
+                            <div class="bg-warning bg-opacity-10 rounded-circle p-4 d-inline-block mx-auto mb-3">
                                 <i class="bi bi-graph-up text-warning fs-1"></i>
                             </div>
                             <h4 class="fw-bold mb-2">Reportes Institucionales</h4>
-                            <p class="text-muted mb-4">Genera reportes estadísticos del sistema de registros</p>
-                            <div class="d-grid">
+                            <p class="text-muted mb-4 flex-grow-1">Genera reportes estadísticos del sistema de registros</p>
+                            <div class="d-grid mt-auto">
                                 <a href="<?php echo BASE_URL; ?>views/modules/fundaciones/internos_por_fundacion.php" class="btn btn-warning btn-lg rounded-pill">
                                     <i class="bi bi-arrow-right-circle me-2"></i>Ver Reportes
                                 </a>
@@ -179,6 +205,73 @@ $fundaciones_con_funcionarios = mysqli_fetch_assoc($result_fundaciones_con_funci
                             </small>
                         </div>
                     </div>
+                </div>
+                <!-- Tarjeta 6: informacion -->
+                <div class="col-md-8 col-lg-9">
+                    <div class="card border-0 shadow-lg rounded-4 h-100 hover-card d-flex flex-column"
+                        style="background: linear-gradient(145deg, #ffffff 0%, #f8faff 100%);">
+
+                        <div class="card-body text-left p-4 d-flex flex-column flex-grow-1">
+                            <!-- Tarjeta de información -->
+                            <div class="card border-0 bg-light rounded-3 overflow-hidden">
+                                <!-- Barra de título -->
+                                <div class="bg-warning px-3 py-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-info-circle-fill text-dark"></i>
+                                        <span class="fw-semibold text-dark small">INFORMACIÓN IMPORTANTE</span>
+                                    </div>
+                                </div>
+
+                                <!-- Lista mejorada -->
+                                <div class="p-3">
+                                    <ol class="mb-0" style="padding-left: 1.2rem;">
+                                        <li class="mb-2 pb-1" style="border-bottom: 1px dashed #dee2e6;">
+                                            <span class="fw-medium text-success">Fundaciones en el sistema</span>
+                                            <br>
+                                            <small class="text-muted">se pueden administrar las instituciones registradas</small>
+                                        </li>
+
+                                        <li class="mb-2 pb-1" style="border-bottom: 1px dashed #dee2e6;">
+                                            <span class="fw-medium text-primary">Finalidad del sistema</span>
+                                            <br>
+                                            <small class="text-muted">El registro y seguimiento de NNA (Niños, Niñas y Adolescentes)</small>
+                                        </li>
+
+                                        <li class="mb-2 pb-1" style="border-bottom: 1px dashed #dee2e6;">
+                                            <span class="fw-medium text-info">Información disponible</span>
+                                            <br>
+                                            <small class="text-muted">Los datos de fundaciones y NNA registrados en el sistema</small>
+                                        </li>
+
+                                        <li class="mb-2 pb-1" style="border-bottom: 1px dashed #dee2e6;">
+                                            <span class="fw-medium text-warning">Acceso en tiempo real</span>
+                                            <br>
+                                            <small class="text-muted">La visualización instantánea de instituciones registradas</small>
+                                        </li>
+
+                                        <li class="mb-0">
+                                            <span class="fw-medium text-danger">Datos personales y familiares</span>
+                                            <br>
+                                            <small class="text-muted">La información de internos y su núcleo familiar</small>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Puedes agregar más tarjetas aquí si es necesario -->
+                <div class="col-md-6 col-lg-3">
+                    <!-- Espacio para futura tarjeta -->
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <!-- Espacio para futura tarjeta -->
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <!-- Espacio para futura tarjeta -->
                 </div>
             </div>
 
@@ -213,7 +306,7 @@ $fundaciones_con_funcionarios = mysqli_fetch_assoc($result_fundaciones_con_funci
                                 $query = "SELECT COUNT(*) as total FROM fundaciones WHERE estado = 1";
                                 $result = mysqli_query($conexion, $query);
                                 $fundacionesActivas = mysqli_fetch_assoc($result)['total'];
-                                
+
                                 // Total funcionarios de fundación
                                 $query = "SELECT COUNT(*) as total FROM usuarios WHERE tipo_usuario = 'fundacion'";
                                 $result = mysqli_query($conexion, $query);
@@ -261,15 +354,21 @@ $fundaciones_con_funcionarios = mysqli_fetch_assoc($result_fundaciones_con_funci
 
 <!-- Estilos personalizados -->
 <style>
+    /* =========================
+   EFECTOS GENERALES
+========================= */
     .hover-card {
         transition: all 0.3s ease;
     }
 
     .hover-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 30px rgba(0, 99, 65, 0.2) !important;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
     }
 
+    /* =========================
+   COLORES PERSONALIZADOS
+========================= */
     .bg-success {
         background-color: #006341 !important;
     }
@@ -282,6 +381,13 @@ $fundaciones_con_funcionarios = mysqli_fetch_assoc($result_fundaciones_con_funci
         color: #006341 !important;
     }
 
+    .bg-info {
+        background-color: #0dcaf0 !important;
+    }
+
+    /* =========================
+   BOTONES
+========================= */
     .btn-success {
         background-color: #006341;
         border-color: #006341;
@@ -299,21 +405,50 @@ $fundaciones_con_funcionarios = mysqli_fetch_assoc($result_fundaciones_con_funci
     .btn-warning {
         background-color: #ffc107;
     }
-    
+
     .btn-info {
         background-color: #0dcaf0;
         border-color: #0dcaf0;
         color: #000;
     }
-    
+
     .btn-info:hover {
         background-color: #31d2f2;
         border-color: #25cff2;
         color: #000;
     }
-    
-    .bg-info {
-        background-color: #0dcaf0 !important;
+
+    /* =========================
+   LAYOUT (SIN CAMBIOS)
+========================= */
+    .col-md-8.col-lg-9 {
+        /* Mantiene tamaño original */
+    }
+
+    /* =========================
+   LISTAS
+========================= */
+    ol li {
+        transition: all 0.2s ease;
+        padding: 4px 0;
+    }
+
+    ol li:hover {
+        transform: translateX(3px);
+        background: rgba(13, 110, 253, 0.03);
+        border-radius: 4px;
+        padding-left: 5px;
+    }
+
+    /* =========================
+   TIPOGRAFÍA
+========================= */
+    .card-body {
+        font-size: 0.9rem;
+    }
+
+    small {
+        font-size: 0.8rem;
     }
 </style>
 

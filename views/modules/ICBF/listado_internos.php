@@ -214,6 +214,62 @@ include("../../../config/conexion.php");
         </div>
     </div>
 </div>
+<style>
+    .hover-card {
+        transition: all 0.3s ease;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 30px rgba(0, 99, 65, 0.2) !important;
+    }
+
+    .bg-success {
+        background-color: #006341 !important;
+    }
+
+    .bg-success.bg-opacity-10 {
+        background-color: rgba(0, 99, 65, 0.1) !important;
+    }
+
+    .text-success {
+        color: #006341 !important;
+    }
+
+    .btn-success {
+        background-color: #006341;
+        border-color: #006341;
+    }
+
+    .btn-success:hover {
+        background-color: #004d33;
+        border-color: #004d33;
+    }
+
+    .btn-primary {
+        background-color: #0d6efd;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+    }
+    
+    .btn-info {
+        background-color: #0dcaf0;
+        border-color: #0dcaf0;
+        color: #000;
+    }
+    
+    .btn-info:hover {
+        background-color: #31d2f2;
+        border-color: #25cff2;
+        color: #000;
+    }
+    
+    .bg-info {
+        background-color: #0dcaf0 !important;
+    }
+</style>
 
 <script>
     // Función para mostrar detalles del interno en el modal
@@ -223,7 +279,7 @@ include("../../../config/conexion.php");
         // Información personal del menor
         html += '<div class="col-md-6 mb-3">';
         html += '<div class="card h-100">';
-        html += '<div class="card-header bg-info text-white"><i class="bi bi-person me-2"></i>Datos del Menor</div>';
+        html += '<div class="card-header bg-success text-white"><i class="bi bi-person me-2"></i>Datos del Menor</div>';
         html += '<div class="card-body">';
         html += '<p><strong>Nombre:</strong> ' + (interno.menor_nombres || '') + '</p>';
         html += '<p><strong>Fecha Nacimiento:</strong> ' + (interno.menor_fecha_nac ? new Date(interno.menor_fecha_nac).toLocaleDateString('es-CO') : '') + '</p>';
@@ -257,7 +313,7 @@ include("../../../config/conexion.php");
         // Padre
         html += '<div class="col-md-6 mb-3">';
         html += '<div class="card h-100">';
-        html += '<div class="card-header bg-primary text-white"><i class="bi bi-person-badge me-2"></i>Padre</div>';
+        html += '<div class="card-header bg-success text-white"><i class="bi bi-person-badge me-2"></i>Padre</div>';
         html += '<div class="card-body">';
         html += '<p><strong>Nombre:</strong> ' + (interno.padre_nombres || '') + '</p>';
         html += '<p><strong>Tipo Documento:</strong> ' + (interno.padre_tipo_doc || '') + '</p>';
@@ -272,7 +328,7 @@ include("../../../config/conexion.php");
         // Madre
         html += '<div class="col-md-6 mb-3">';
         html += '<div class="card h-100">';
-        html += '<div class="card-header bg-warning text-dark"><i class="bi bi-person-badge me-2"></i>Madre</div>';
+        html += '<div class="card-header bg-success text-white"><i class="bi bi-person-badge me-2"></i>Madre</div>';
         html += '<div class="card-body">';
         html += '<p><strong>Nombre:</strong> ' + (interno.madre_nombres || '') + '</p>';
         html += '<p><strong>Tipo Documento:</strong> ' + (interno.madre_tipo_doc || '') + '</p>';
@@ -287,7 +343,7 @@ include("../../../config/conexion.php");
         // Escolaridad
         html += '<div class="col-md-6 mb-3">';
         html += '<div class="card h-100">';
-        html += '<div class="card-header bg-secondary text-white"><i class="bi bi-book me-2"></i>Escolaridad</div>';
+        html += '<div class="card-header bg-success text-white"><i class="bi bi-book me-2"></i>Escolaridad</div>';
         html += '<div class="card-body">';
         html += '<p><strong>Nivel Escolar:</strong> ' + (interno.escolaridad || '') + '</p>';
         html += '<p><strong>Institución:</strong> ' + (interno.institucion || '') + '</p>';
@@ -297,7 +353,7 @@ include("../../../config/conexion.php");
         // Observaciones
         html += '<div class="col-md-6 mb-3">';
         html += '<div class="card h-100">';
-        html += '<div class="card-header bg-dark text-white"><i class="bi bi-chat me-2"></i>Observaciones</div>';
+        html += '<div class="card-header bg-success text-white"><i class="bi bi-chat me-2"></i>Observaciones</div>';
         html += '<div class="card-body">';
         html += '<p><strong>Psicológicas:</strong> ' + (interno.obs_psicologicas || '') + '</p>';
         html += '<p><strong>Sociales:</strong> ' + (interno.obs_sociales || '') + '</p>';
@@ -306,7 +362,7 @@ include("../../../config/conexion.php");
         // Ingreso y responsables
         html += '<div class="col-md-12 mb-3">';
         html += '<div class="card">';
-        html += '<div class="card-header bg-info text-white"><i class="bi bi-calendar me-2"></i>Información de Ingreso</div>';
+        html += '<div class="card-header bg-success text-white"><i class="bi bi-calendar me-2"></i>Información de Ingreso</div>';
         html += '<div class="card-body">';
         html += '<div class="row">';
         html += '<div class="col-md-4"><p><strong>Fecha Ingreso:</strong> ' + (interno.fecha_ingreso ? new Date(interno.fecha_ingreso).toLocaleDateString('es-CO') : '') + '</p></div>';

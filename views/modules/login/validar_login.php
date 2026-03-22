@@ -1,111 +1,128 @@
 <?php
-
 session_start();
 define("BASE_URL", "/proyectoclon/RSNNA-P.P/");
 
 require_once("../../../config/conexion.php");
 
-/* VALIDAR METODO */
-
-if($_SERVER["REQUEST_METHOD"] != "POST"){
-header("Location: login.php");
-exit();
+// ============================================
+// VALIDAR MÉTODO POST
+// ============================================
+if ($_SERVER["REQUEST_METHOD"] != "POST") {
+    header("Location: login.php");
+    exit();
 }
 
-/* RECIBIR DATOS */
-
+// ============================================
+// RECIBIR Y SANITIZAR DATOS
+// ============================================
 $correo = trim($_POST['correo'] ?? '');
 $password = $_POST['password'] ?? '';
 
-if(empty($correo) || empty($password)){
-header("Location: login.php?error=1");
-exit();
+if (empty($correo) || empty($password)) {
+    header("Location: login.php?error=1");
+    exit();
 }
 
-/* CONSULTA */
+// ============================================
+// CONSULTA SEGURA CON PREPARED STATEMENT
+// ============================================
+$stmt = $conexion->prepare("SELECT 
+                                id, 
+                                correo, 
+                                password, 
+                                tipo_usuario, 
+                                nombre_completo, 
+                                estado, 
+                                id_fundacion 
+                            FROM usuarios 
+                            WHERE correo = ? 
+                            LIMIT 1");
 
-$stmt = $conexion->prepare("
-SELECT 
-id,
-correo,
-password,
-tipo_usuario,
-nombre_completo,
-estado,
-id_fundacion
-FROM usuarios
-WHERE correo = ?
-");
+if (!$stmt) {
+    error_log("Error en prepare: " . $conexion->error);
+    header("Location: login.php?error=3");
+    exit();
+}
 
-$stmt->bind_param("s",$correo);
+$stmt->bind_param("s", $correo);
 $stmt->execute();
-
 $result = $stmt->get_result();
 
-if($result->num_rows == 0){
-header("Location: login.php?error=1");
-exit();
+// ============================================
+// VERIFICAR SI EXISTE EL USUARIO
+// ============================================
+if ($result->num_rows == 0) {
+    $stmt->close();
+    header("Location: login.php?error=1");
+    exit();
 }
 
 $usuario = $result->fetch_assoc();
+$stmt->close();
 
-/* USUARIO INACTIVO */
-
-if($usuario['estado'] != 1){
-header("Location: login.php?error=2");
-exit();
+// ============================================
+// VERIFICAR SI EL USUARIO ESTÁ ACTIVO
+// ============================================
+if ($usuario['estado'] != 1) {
+    header("Location: login.php?error=2");
+    exit();
 }
 
-/* VERIFICAR PASSWORD */
-
-if(!password_verify($password,$usuario['password'])){
-header("Location: login.php?error=1");
-exit();
+// ============================================
+// VERIFICAR CONTRASEÑA
+// ============================================
+if (!password_verify($password, $usuario['password'])) {
+    header("Location: login.php?error=1");
+    exit();
 }
 
-/* GUARDAR SESION */
+// ============================================
+// GUARDAR DATOS EN SESIÓN (COMBINANDO AMBOS FORMATOS)
+// ============================================
+// Formato del primer código (para compatibilidad)
+$_SESSION['id_usuario'] = $usuario['id'];
+$_SESSION['usuario'] = $usuario['correo'];
+$_SESSION['tipo_usuario'] = $usuario['tipo_usuario'];
 
+// Formato del segundo código (más descriptivo)
 $_SESSION['usuario_id'] = $usuario['id'];
 $_SESSION['usuario_correo'] = $usuario['correo'];
 $_SESSION['usuario_nombre'] = $usuario['nombre_completo'];
 $_SESSION['usuario_tipo'] = $usuario['tipo_usuario'];
 
-/* FUNDACION (IMPORTANTE) */
-
+// Guardar id_fundacion (MUY IMPORTANTE - línea adaptada del primer código)
 $_SESSION['id_fundacion'] = $usuario['id_fundacion'] ?? null;
+$_SESSION['id'] = $usuario['id']; // Para compatibilidad adicional
 
-/* ACTUALIZAR ULTIMO ACCESO */
+// ============================================
+// ACTUALIZAR ÚLTIMO ACCESO
+// ============================================
+$updateStmt = $conexion->prepare("UPDATE usuarios SET ultimo_acceso = NOW() WHERE id = ?");
+if ($updateStmt) {
+    $updateStmt->bind_param("i", $usuario['id']);
+    $updateStmt->execute();
+    $updateStmt->close();
+}
 
-$conexion->query("
-UPDATE usuarios 
-SET ultimo_acceso = NOW()
-WHERE id = ".$usuario['id']);
-
-/* REDIRECCION */
-
-switch($usuario['tipo_usuario']){
-
-case 'icbf':
-
-header("Location: ".BASE_URL."views/modules/ICBF/panel_icbf.php");
-break;
-
-case 'fundacion':
-
-header("Location: ".BASE_URL."views/modules/fundaciones/panel_fundacion.php");
-break;
-
-case 'familia':
-
-header("Location: ".BASE_URL."views/modules/Familias/panel_familia.php");
-break;
-
-default:
-
-header("Location: ".BASE_URL."views/modules/Navegacion/dashboard.php");
-
+// ============================================
+// REDIRECCIONAR SEGÚN TIPO DE USUARIO
+// ============================================
+switch ($usuario['tipo_usuario']) {
+    case 'icbf':
+        header("Location: " . BASE_URL . "views/modules/ICBF/panel_icbf.php");
+        break;
+        
+    case 'fundacion':
+        header("Location: " . BASE_URL . "views/modules/fundaciones/panel_fundacion.php");
+        break;
+        
+    case 'familia':
+        header("Location: " . BASE_URL . "views/modules/Familias/panel_familia.php");
+        break;
+        
+    default:
+        header("Location: " . BASE_URL . "views/modules/Navegacion/dashboard.php");
 }
 
 exit();
-
 ?>

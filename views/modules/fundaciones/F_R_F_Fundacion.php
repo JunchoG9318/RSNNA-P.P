@@ -222,7 +222,21 @@ $resultado_fundaciones = $conexion->query($sql_fundaciones);
 
                                 <div class="col-md-4">
                                     <label>Nacionalidad</label>
-                                    <input type="text" name="nacionalidad" class="form-control" placeholder="Ej: Colombiana">
+                                    <!-- CAMBIADO A SELECT -->
+                                    <select name="nacionalidad" id="nacionalidad" class="form-select" required>
+                                        <option value="" disabled selected>Seleccione nacionalidad</option>
+                                        <option value="Colombiana">Colombiana</option>
+                                        <option value="Venezolana">Venezolana</option>
+                                        <option value="Peruana">Peruana</option>
+                                        <option value="Ecuatoriana">Ecuatoriana</option>
+                                        <option value="Argentina">Argentina</option>
+                                        <option value="Chilena">Chilena</option>
+                                        <option value="Brasileña">Brasileña</option>
+                                        <option value="Mexicana">Mexicana</option>
+                                        <option value="Española">Española</option>
+                                        <option value="Estadounidense">Estadounidense</option>
+                                        <option value="Otra">Otra</option>
+                                    </select>
                                 </div>
 
                                 <div class="col-md-4">
@@ -236,18 +250,33 @@ $resultado_fundaciones = $conexion->query($sql_fundaciones);
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label>Pais</label>
-                                    <input type="text" name="pais" class="form-control" placeholder="Ej: Colombia">
+                                    <label>País</label>
+                                    <!-- CAMBIADO A SELECT -->
+                                    <select name="pais" id="pais" class="form-select" required>
+                                        <option value="">Seleccione un país</option>
+                                        <option value="Colombia" selected>Colombia</option>
+                                        <option value="Venezuela">Venezuela</option>
+                                        <option value="Ecuador">Ecuador</option>
+                                        <option value="Perú">Perú</option>
+                                        <option value="Chile">Chile</option>
+                                        <option value="Otros">Otros</option>
+                                    </select>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label>Departamento</label>
-                                    <input type="text" name="departamento" class="form-control" placeholder="Ej: Antioquia">
+                                    <!-- CAMBIADO A SELECT -->
+                                    <select name="departamento" id="departamento" class="form-select" required>
+                                        <option value="">Seleccione un departamento</option>
+                                    </select>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label>Ciudad</label>
-                                    <input type="text" name="ciudad" class="form-control" placeholder="Ej: Medellín">
+                                    <!-- CAMBIADO A SELECT -->
+                                    <select name="ciudad" id="ciudad" class="form-select" required>
+                                        <option value="">Seleccione una ciudad</option>
+                                    </select>
                                 </div>
 
                             </div>
@@ -309,5 +338,127 @@ $resultado_fundaciones = $conexion->query($sql_fundaciones);
     </form>
 
 </body>
+
+<!-- Bootstrap Icons (necesarios para el estilo, ya incluidos en header pero se agregan por si acaso) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<!-- Script para departamentos y ciudades de Colombia -->
+<script>
+    // Datos de departamentos y ciudades de Colombia
+    const colombiaData = {
+        "Amazonas": ["Leticia", "Puerto Asís", "Puerto Nariño", "Mirití-Paraná"],
+        "Antioquia": ["Medellín", "Bello", "Envigado", "Itagüí", "Rionegro", "Sabaneta", "Buenaventura", "Turbo", "Caucasia", "Apartadó"],
+        "Arauca": ["Arauca", "Saravena", "Tame", "Fortul", "Cravo Norte"],
+        "Atlántico": ["Barranquilla", "Soledad", "Malambo", "Baranoa", "Galapa", "Palmar de Varela"],
+        "Bolívar": ["Cartagena", "Mompós", "Magangué", "Turbaco", "Zambrano", "Tiquisio"],
+        "Boyacá": ["Tunja", "Duitama", "Sogamoso", "Villanueva", "Chiquinquirá", "Paipa", "Moniquirá"],
+        "Caldas": ["Manizales", "Pereira", "Armenia", "Villamaría", "La Dorada", "Salamina"],
+        "Caquetá": ["Florencia", "San Vicente del Caguán", "Solano", "San José del Fragua"],
+        "Casanare": ["Yopal", "Aguazul", "Tauramena", "Villanueva", "Hato Corozal"],
+        "Cauca": ["Popayán", "Santander de Quilichao", "Piendamó", "Buenos Aires", "Santander de Quilichao"],
+        "Cesar": ["Valledupar", "Aguachica", "Gamarra", "La Paz", "Becerril"],
+        "Chocó": ["Quibdó", "Istmina", "Bojayá", "Riosucio", "Lloró"],
+        "Córdoba": ["Montería", "Cereté", "Tierralta", "Los Córdobas", "Moñitos"],
+        "Cundinamarca": ["Bogotá", "Zipaquirá", "Chía", "Cajicá", "Soacha", "Facatativá", "Girardot"],
+        "Guainía": ["Inírida", "Mapiripana", "San Fernando de Guainía"],
+        "Guaviare": ["San José del Guaviare", "Calamar", "El Retorno"],
+        "Huila": ["Neiva", "Pitalito", "Garzón", "Páez", "Santa María"],
+        "La Guajira": ["Riohacha", "Maicao", "Uribia", "San Juan del Cesar", "Albania"],
+        "Magdalena": ["Santa Marta", "Ciénaga", "Fundación", "Plato", "Mompós"],
+        "Meta": ["Villavicencio", "Granada", "Acacías", "Puerto López", "Puerto Carreño"],
+        "Nariño": ["Pasto", "Santander de Quilichao", "Ipiales", "Tumaco", "Pasto"],
+        "Norte de Santander": ["Cúcuta", "Los Patios", "Ocaña", "Villa del Rosario", "Pamplona"],
+        "Putumayo": ["Mocoa", "Sibundoy", "San Miguel", "Orito", "Colón"],
+        "Quindío": ["Armenia", "Pereira", "Montenegro", "Salento", "Circasia"],
+        "Risaralda": ["Pereira", "Dosquebradas", "Santa Rosa de Cabal", "La Virginia", "Marsella"],
+        "San Andrés y Providencia": ["San Andrés", "Providencia", "Santa Catalina"],
+        "Santander": ["Bucaramanga", "Floridablanca", "Girón", "Barbosa", "Villanueva"],
+        "Sucre": ["Sincelejo", "Corozal", "San Onofre", "Los Palmitos", "Buenavista"],
+        "Tolima": ["Ibagué", "Honda", "Mariquita", "Alpujarra", "Cajibío"],
+        "Valle del Cauca": ["Cali", "Buenaventura", "Palmira", "Tuluá", "Buga"],
+        "Vaupés": ["Mitú", "Yavaraté", "Taraira", "Carurú"],
+        "Vichada": ["Puerto Carreño", "La Primavera", "Santa Rosalía", "Cumaribo"]
+    };
+
+    // Función para llenar el select de departamentos
+    function llenarDepartamentos() {
+        const selectDepartamento = document.getElementById('departamento');
+        const selectPais = document.getElementById('pais');
+
+        // Limpiar opciones anteriores
+        selectDepartamento.innerHTML = '<option value="">Seleccione un departamento</option>';
+
+        // Obtener el país seleccionado
+        const paisSeleccionado = selectPais.value;
+
+        // Si es Colombia, llenar departamentos
+        if (paisSeleccionado === 'Colombia') {
+            selectDepartamento.disabled = false;
+            for (let departamento in colombiaData) {
+                const option = document.createElement('option');
+                option.value = departamento;
+                option.textContent = departamento;
+                selectDepartamento.appendChild(option);
+            }
+        } else {
+            // Si no es Colombia, deshabilitar departamento
+            selectDepartamento.disabled = true;
+            selectDepartamento.innerHTML = '<option value="">Seleccione un departamento</option>';
+            // También limpiar ciudades
+            const selectCiudad = document.getElementById('ciudad');
+            selectCiudad.innerHTML = '<option value="">Seleccione una ciudad</option>';
+            selectCiudad.disabled = true;
+        }
+    }
+
+    // Función para llenar el select de ciudades
+    function llenarCiudades() {
+        const selectCiudad = document.getElementById('ciudad');
+        const selectDepartamento = document.getElementById('departamento');
+
+        // Limpiar opciones anteriores
+        selectCiudad.innerHTML = '<option value="">Seleccione una ciudad</option>';
+
+        // Obtener el departamento seleccionado
+        const departamentoSeleccionado = selectDepartamento.value;
+
+        // Si hay departamento seleccionado y no está deshabilitado, llenar ciudades
+        if (departamentoSeleccionado && !selectDepartamento.disabled && colombiaData[departamentoSeleccionado]) {
+            selectCiudad.disabled = false;
+            const ciudades = colombiaData[departamentoSeleccionado];
+            ciudades.forEach(ciudad => {
+                const option = document.createElement('option');
+                option.value = ciudad;
+                option.textContent = ciudad;
+                selectCiudad.appendChild(option);
+            });
+        } else {
+            selectCiudad.disabled = true;
+        }
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectPais = document.getElementById('pais');
+        const selectDepartamento = document.getElementById('departamento');
+        const selectCiudad = document.getElementById('ciudad');
+
+        // Cuando cambia el país
+        selectPais.addEventListener('change', function() {
+            llenarDepartamentos();
+            // Limpiar ciudades cuando cambia el país
+            selectCiudad.innerHTML = '<option value="">Seleccione una ciudad</option>';
+            selectCiudad.disabled = true;
+        });
+
+        // Cuando cambia el departamento
+        selectDepartamento.addEventListener('change', function() {
+            llenarCiudades();
+        });
+
+        // Inicializar departamentos al cargar
+        llenarDepartamentos();
+    });
+</script>
 
 <?php include("../../../footer.php"); ?>

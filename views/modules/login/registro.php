@@ -81,7 +81,7 @@ include("../../../header.php");
 
                     <!-- Beneficios del sistema -->
                     <h5 class="fw-bold text-dark mb-3">
-                        <i class="bi bi-star-fill text-success me-2"></i>Beneficios del sistema
+                        <i class="bi bi-star-fill text-success me-2"></i>Recomendaciones
                     </h5>
 
                     <div class="d-flex flex-column gap-3 mb-4">
@@ -91,8 +91,8 @@ include("../../../header.php");
                                 <i class="bi bi-check-lg text-success"></i>
                             </div>
                             <div>
-                                <span class="fw-semibold d-block">Seguimiento en tiempo real</span>
-                                <small class="text-muted">Monitoreo continuo de NNA</small>
+                                <span class="fw-semibold d-block">Si eres funcionario de alguna fundacion</span>
+                                <small class="text-muted">Primero registra tu fundacion para poder registrarte como usuario</small>
                             </div>
                         </div>
 
@@ -102,8 +102,8 @@ include("../../../header.php");
                                 <i class="bi bi-check-lg text-success"></i>
                             </div>
                             <div>
-                                <span class="fw-semibold d-block">Coordinación interinstitucional</span>
-                                <small class="text-muted">ICBF, Fundaciones y Familias</small>
+                                <span class="fw-semibold d-block">Eres padre, madre, pariente o representante legal de familia</span>
+                                <small class="text-muted">registrate en el icono de familia </small>
                             </div>
                         </div>
 

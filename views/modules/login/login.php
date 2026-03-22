@@ -27,6 +27,15 @@ include("../../../header.php");
 
                 <div class="card-body p-4">
 
+                    <!-- Mensaje de restablecimiento exitoso -->
+                    <?php if (isset($_SESSION['mensaje_reset'])) { ?>
+                    <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <?php echo $_SESSION['mensaje_reset']; unset($_SESSION['mensaje_reset']); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <?php } ?>
+
                     <!-- Mensajes de error -->
                     <?php if (isset($_GET["error"])) { ?>
                     <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
@@ -106,7 +115,7 @@ include("../../../header.php");
                         </div>
 
                         <div class="text-center mt-2">
-                            <a href="#" class="text-muted small">¿Olvidaste tu contraseña?</a>
+                            <a href="recuperar_password.php" class="text-muted small">¿Olvidaste tu contraseña?</a>
                         </div>
 
                     </form>
